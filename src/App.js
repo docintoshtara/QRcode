@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import QRCode from 'react-qr-code';
 import './App.css';
+import Swal from 'sweetalert2';
 
 function App() {
   const [valueurl, setValue] = useState('');
   const canvasRef  = useRef();
 
   const downloadQRCode = () => {
+    const randNum=new Date().toISOString().replace(/[-:T.]/g, '')
     const svg = canvasRef.current.children[0];
     const svgData = new XMLSerializer().serializeToString(svg);
     const canvas = document.createElement('canvas');
@@ -21,8 +23,14 @@ function App() {
       const pngFile = canvas.toDataURL('image/png');
       const downloadLink = document.createElement('a');
       downloadLink.href = pngFile;
-      downloadLink.download = 'qrcode.png';
+      downloadLink.download = randNum+'.png';
       downloadLink.click();
+      Swal.fire({
+        title: "Good job!",
+        text: "Thanks for downloading...",
+        icon: "success"
+      });
+
     };
 
     img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
